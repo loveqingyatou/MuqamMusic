@@ -1,7 +1,14 @@
 package com.zsc.muqammusic.ui;
 
+import java.util.ArrayList;
+
 import com.zsc.muqammusic.R;
+import com.zsc.muqammusic.model.WordButton;
+import com.zsc.muqammusic.myui.MyGridView;
+import com.zsc.muqammusic.util.Util;
+
 import android.app.Activity;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -11,8 +18,11 @@ import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LinearInterpolator;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.LinearLayout.LayoutParams;
 
 public class MainActivity extends Activity {
 
@@ -36,11 +46,22 @@ public class MainActivity extends Activity {
 	// 当前动画是否正在运行
 	private boolean mIsRunning = false;
 	
+	// 文字框容器
+	private ArrayList<WordButton> mAllWords;
+	
+	private ArrayList<WordButton> mBtnSelectWords;
+	
+	private MyGridView mMyGridView;
+	
+	// 已选择文字框UI容器
+	private LinearLayout mViewWordsContainer;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		
+		// 初始化控件
 		mBtnPlayStart = (ImageButton)findViewById(R.id.btn_play_start);
 		mBtnPlayStart.setOnClickListener(new View.OnClickListener() {
 			
@@ -54,6 +75,8 @@ public class MainActivity extends Activity {
 		// 初始化控件
 		mViewPan = (ImageView)findViewById(R.id.imageView1);
 		mViewPanBar = (ImageView)findViewById(R.id.imageView2);
+        mMyGridView = (MyGridView)findViewById(R.id.gridview);	
+		mViewWordsContainer = (LinearLayout)findViewById(R.id.word_select_container);
 		
 		// 初始化动画
 		mPanAnim = AnimationUtils.loadAnimation(this, R.anim.rotate);
@@ -125,6 +148,10 @@ public class MainActivity extends Activity {
             	
             }
         });
+		
+		
+		// 初始化游戏数据
+		initCurrentStageData();
 	}
 
 	
@@ -149,6 +176,70 @@ public class MainActivity extends Activity {
         super.onPause();
     }
 	
+	
+	private void initCurrentStageData() {
+		// 初始化已选择框
+		mBtnSelectWords = initWordSelect();
+		
+		LayoutParams params = new LayoutParams(80, 80);
+		
+		for (int i = 0; i < mBtnSelectWords.size(); i++) {
+			mViewWordsContainer.addView(
+					mBtnSelectWords.get(i).mViewButton,
+					params);
+		}
+		
+		// 获得数据
+		mAllWords = initAllWord();
+		// 更新数据- MyGridView
+		mMyGridView.updateData(mAllWords);
+	}
+	
+	/**
+	 * 初始化待选文字框
+	 */
+	private ArrayList<WordButton> initAllWord() {
+		ArrayList<WordButton> data = new ArrayList<WordButton>();
+		
+		// 获得所有待选文字
+	    // .........
+		
+		for (int i = 0; i < MyGridView.COUNTS_WORDS; i++) {
+			WordButton button = new WordButton();
+			
+			button.mWordString = "好";
+			
+			data.add(button);
+		}
+		
+		return data;
+	}
+	
+	/**
+	 * 初始化已选择文字框
+	 * 
+	 * @return
+	 */
+	private ArrayList<WordButton> initWordSelect() {
+		ArrayList<WordButton> data = new ArrayList<WordButton>();
+		
+		for (int i = 0; i < 4; i++) {
+			View view = Util.getView(MainActivity.this, R.layout.self_ui_gridview_item);
+			
+			WordButton holder = new WordButton();
+			
+			holder.mViewButton = (Button)view.findViewById(R.id.item_btn);
+			holder.mViewButton.setTextColor(Color.WHITE);
+			holder.mViewButton.setText("");
+			holder.mIsVisiable = false;
+			
+			holder.mViewButton.setBackgroundResource(R.drawable.game_wordblank);
+			
+			data.add(holder);
+		}
+		
+		return data;
+	}
 	
 	
 	@Override
