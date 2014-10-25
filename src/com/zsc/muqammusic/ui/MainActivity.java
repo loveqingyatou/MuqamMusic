@@ -1,9 +1,13 @@
 package com.zsc.muqammusic.ui;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Random;
 
 import com.zsc.muqammusic.R;
+import com.zsc.muqammusic.data.Const;
 import com.zsc.muqammusic.model.IWordButtonClickListener;
+import com.zsc.muqammusic.model.Song;
 import com.zsc.muqammusic.model.WordButton;
 import com.zsc.muqammusic.myui.MyGridView;
 import com.zsc.muqammusic.util.Util;
@@ -57,6 +61,12 @@ public class MainActivity extends Activity implements IWordButtonClickListener{
 	
 	// 已选择文字框UI容器
 	private LinearLayout mViewWordsContainer;
+	
+	// 当前的歌曲
+	private Song mCurrentSong;
+	
+	// 当前关的索引
+	private int mCurrentStageIndex = -1;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -177,12 +187,27 @@ public class MainActivity extends Activity implements IWordButtonClickListener{
 	@Override
     public void onPause() {
         mViewPan.clearAnimation();
-        
         super.onPause();
     }
 	
+	/**
+	 * 根据索引值从歌曲文件中取歌曲信息
+	 * @param stageIndex 索引值
+	 * @return
+	 */
+	private Song loadStageSongInfo(int stageIndex) {
+		Song song = new Song();
+		
+		String[] stage = Const.SONG_INFO[stageIndex];
+		song.setSongFileName(stage[Const.INDEX_FILE_NAME]);
+		song.setSongName(stage[Const.INDEX_SONG_NAME]);
+		
+		return song;
+	}
 	
 	private void initCurrentStageData() {
+		// 读取当前关的歌曲信息
+		mCurrentSong = loadStageSongInfo(++mCurrentStageIndex);
 		// 初始化已选择框
 		mBtnSelectWords = initWordSelect();
 		
@@ -207,12 +232,12 @@ public class MainActivity extends Activity implements IWordButtonClickListener{
 		ArrayList<WordButton> data = new ArrayList<WordButton>();
 		
 		// 获得所有待选文字
-	    // .........
+		String[] words = generateWords();
 		
 		for (int i = 0; i < MyGridView.COUNTS_WORDS; i++) {
 			WordButton button = new WordButton();
 			
-			button.mWordString = "好";
+			button.mWordString = words[i];
 			
 			data.add(button);
 		}
@@ -228,7 +253,7 @@ public class MainActivity extends Activity implements IWordButtonClickListener{
 	private ArrayList<WordButton> initWordSelect() {
 		ArrayList<WordButton> data = new ArrayList<WordButton>();
 		
-		for (int i = 0; i < 4; i++) {
+		for (int i = 0; i < mCurrentSong.getNameLength(); i++) {
 			View view = Util.getView(MainActivity.this, R.layout.self_ui_gridview_item);
 			
 			WordButton holder = new WordButton();
@@ -246,6 +271,75 @@ public class MainActivity extends Activity implements IWordButtonClickListener{
 		return data;
 	}
 	
+	@Override
+	public void onWordButtonClick(WordButton wordButton) {
+		// TODO Auto-generated method stub
+		Toast.makeText(this, wordButton.mIndex + "", Toast.LENGTH_SHORT).show();
+	}
+	
+	/**
+	 * 生成所有的待选文字
+	 *
+	 * @return
+	 */
+	private String[] generateWords() {
+		Random random = new Random();
+		
+		String[] words = new String[MyGridView.COUNTS_WORDS];
+		
+		// 存入歌名
+		for (int i = 0; i < mCurrentSong.getNameLength(); i++) {
+			words[i] = mCurrentSong.getNameCharacters()[i] + "";
+		}
+		
+		// 获取随机文字并存入数组
+		for (int i = mCurrentSong.getNameLength(); 
+				i < MyGridView.COUNTS_WORDS; i++) {
+			words[i] = getRandomChar() + "";
+		}
+		
+		// 打乱文字顺序：首先从所有元素中随机选取一个与第一个元素进行交换，
+		// 然后在第二个之后选择一个元素与第二个交换，知道最后一个元素。
+		// 这样能够确保每个元素在每个位置的概率都是1/n。
+		for (int i = MyGridView.COUNTS_WORDS - 1; i >= 0; i--) {
+			int index = random.nextInt(i + 1);
+			
+			String buf = words[index];
+			words[index] = words[i];
+			words[i] = buf;
+		}
+		
+		return words;
+	}
+	
+	/**
+	 * 生成随机汉字
+	 * 
+	 * @return
+	 */
+	private char getRandomChar() {
+		String str = "";
+		int hightPos;
+		int lowPos;
+		
+		Random random = new Random();
+		
+		hightPos = (176 + Math.abs(random.nextInt(39)));
+		lowPos = (161 + Math.abs(random.nextInt(93)));
+		
+		byte[] b = new byte[2];
+		b[0] = (Integer.valueOf(hightPos)).byteValue();
+		b[1] = (Integer.valueOf(lowPos)).byteValue();
+		
+		try {
+			str = new String(b, "GBK");
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return str.charAt(0);
+	}
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -266,10 +360,4 @@ public class MainActivity extends Activity implements IWordButtonClickListener{
 		return super.onOptionsItemSelected(item);
 	}
 
-
-	@Override
-	public void onWordButtonClick(WordButton wordButton) {
-		// TODO Auto-generated method stub
-		Toast.makeText(this, wordButton.mIndex + "", Toast.LENGTH_SHORT).show();
-	}
 }
