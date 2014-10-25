@@ -3,6 +3,7 @@ package com.zsc.muqammusic.ui;
 import java.util.ArrayList;
 
 import com.zsc.muqammusic.R;
+import com.zsc.muqammusic.model.IWordButtonClickListener;
 import com.zsc.muqammusic.model.WordButton;
 import com.zsc.muqammusic.myui.MyGridView;
 import com.zsc.muqammusic.util.Util;
@@ -23,8 +24,9 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
+import android.widget.Toast;
 
-public class MainActivity extends Activity {
+public class MainActivity extends Activity implements IWordButtonClickListener{
 
 	// 唱片相关动画
 	private Animation mPanAnim;
@@ -77,6 +79,9 @@ public class MainActivity extends Activity {
 		mViewPanBar = (ImageView)findViewById(R.id.imageView2);
         mMyGridView = (MyGridView)findViewById(R.id.gridview);	
 		mViewWordsContainer = (LinearLayout)findViewById(R.id.word_select_container);
+		
+		// 注册监听
+		mMyGridView.registOnWordButtonClick(this);
 		
 		// 初始化动画
 		mPanAnim = AnimationUtils.loadAnimation(this, R.anim.rotate);
@@ -259,5 +264,12 @@ public class MainActivity extends Activity {
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
+	}
+
+
+	@Override
+	public void onWordButtonClick(WordButton wordButton) {
+		// TODO Auto-generated method stub
+		Toast.makeText(this, wordButton.mIndex + "", Toast.LENGTH_SHORT).show();
 	}
 }
