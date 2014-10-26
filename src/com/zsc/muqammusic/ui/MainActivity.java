@@ -10,6 +10,7 @@ import com.zsc.muqammusic.model.IWordButtonClickListener;
 import com.zsc.muqammusic.model.Song;
 import com.zsc.muqammusic.model.WordButton;
 import com.zsc.muqammusic.myui.MyGridView;
+import com.zsc.muqammusic.util.MyLog;
 import com.zsc.muqammusic.util.Util;
 
 import android.app.Activity;
@@ -31,6 +32,8 @@ import android.widget.LinearLayout.LayoutParams;
 import android.widget.Toast;
 
 public class MainActivity extends Activity implements IWordButtonClickListener{
+	
+	public final static String TAG = "MainActivity";
 
 	// 唱片相关动画
 	private Animation mPanAnim;
@@ -256,7 +259,7 @@ public class MainActivity extends Activity implements IWordButtonClickListener{
 		for (int i = 0; i < mCurrentSong.getNameLength(); i++) {
 			View view = Util.getView(MainActivity.this, R.layout.self_ui_gridview_item);
 			
-			WordButton holder = new WordButton();
+			final WordButton holder = new WordButton();
 			
 			holder.mViewButton = (Button)view.findViewById(R.id.item_btn);
 			holder.mViewButton.setTextColor(Color.WHITE);
@@ -264,6 +267,13 @@ public class MainActivity extends Activity implements IWordButtonClickListener{
 			holder.mIsVisiable = false;
 			
 			holder.mViewButton.setBackgroundResource(R.drawable.game_wordblank);
+			holder.mViewButton.setOnClickListener(new View.OnClickListener() {
+				
+				@Override
+				public void onClick(View arg0) {
+					clearTheAnswer(holder);
+				}
+			});
 			
 			data.add(holder);
 		}
@@ -274,7 +284,55 @@ public class MainActivity extends Activity implements IWordButtonClickListener{
 	@Override
 	public void onWordButtonClick(WordButton wordButton) {
 		// TODO Auto-generated method stub
-		Toast.makeText(this, wordButton.mIndex + "", Toast.LENGTH_SHORT).show();
+		//Toast.makeText(this, wordButton.mIndex + "", Toast.LENGTH_SHORT).show();
+		setSelectWord(wordButton);
+	}
+	
+	private void clearTheAnswer(WordButton wordButton) {
+		wordButton.mViewButton.setText("");
+		wordButton.mWordString = "";
+		wordButton.mIsVisiable = false;
+		
+		// 设置待选框可见性
+		setButtonVisiable(mAllWords.get(wordButton.mIndex), View.VISIBLE);
+	}
+	
+	/**
+	 * 设置答案
+	 * 
+	 * @param wordButton
+	 */
+	private void setSelectWord(WordButton wordButton) {
+		for (int i = 0; i < mBtnSelectWords.size(); i++) {
+			if (mBtnSelectWords.get(i).mWordString.length() == 0) {
+				// 设置答案文字框内容及可见性
+				mBtnSelectWords.get(i).mViewButton.setText(wordButton.mWordString);
+				mBtnSelectWords.get(i).mIsVisiable = true;
+				mBtnSelectWords.get(i).mWordString = wordButton.mWordString;
+				// 记录索引
+				mBtnSelectWords.get(i).mIndex = wordButton.mIndex;
+				
+				MyLog.d(TAG, mBtnSelectWords.get(i).mIndex + "");
+				
+				// 设置待选框可见性
+				setButtonVisiable(wordButton, View.INVISIBLE);
+				
+				break;
+			}
+		}
+	}
+	
+	/**
+	 * 设置待选文字框是否可见
+	 * 
+	 * @param button
+	 * @param visibility
+	 */
+	private void setButtonVisiable(WordButton button, int visibility) {
+		button.mViewButton.setVisibility(visibility);
+		button.mIsVisiable = (visibility == View.VISIBLE) ? true : false;
+		
+		MyLog.d(TAG, button.mIsVisiable + "");
 	}
 	
 	/**
