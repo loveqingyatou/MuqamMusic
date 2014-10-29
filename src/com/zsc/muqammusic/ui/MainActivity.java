@@ -8,6 +8,7 @@ import java.util.TimerTask;
 
 import com.zsc.muqammusic.R;
 import com.zsc.muqammusic.data.Const;
+import com.zsc.muqammusic.model.IAlertDialogButtonListener;
 import com.zsc.muqammusic.model.IWordButtonClickListener;
 import com.zsc.muqammusic.model.Song;
 import com.zsc.muqammusic.model.WordButton;
@@ -50,6 +51,10 @@ public class MainActivity extends Activity implements IWordButtonClickListener{
     
     // 闪烁次数
     public final static int SPASH_TIMES = 6;
+    
+    public final static int ID_DIALOG_DELETE_WORD = 1;
+    public final static int ID_DIALOG_TIP_ANSWER = 2;
+    public final static int ID_DIALOG_LACK_COINS = 3;
 
 	// 唱片相关动画
 	private Animation mPanAnim;
@@ -579,7 +584,13 @@ public class MainActivity extends Activity implements IWordButtonClickListener{
 	/**
 	 * 自动选择一个答案
 	 */
-	private void tipAnswer() {		
+	private void tipAnswer() {
+		// 减少金币数量
+		if (!handleCoins(-getTipCoins())) {
+			// 金币数量不够，显示对话框
+			showConfirmDialog(ID_DIALOG_LACK_COINS);
+			return;
+		}
 		boolean tipWord = false;
 		for (int i = 0; i < mBtnSelectWords.size(); i++) {
 			if (mBtnSelectWords.get(i).mWordString.length() == 0) {
@@ -588,11 +599,6 @@ public class MainActivity extends Activity implements IWordButtonClickListener{
 				
 				tipWord = true;
 				
-				// 减少金币数量
-				if (!handleCoins(-getTipCoins())) {
-					// 金币数量不够，显示对话框
-					return;
-				}
 				break;
 			}
 		}
@@ -611,6 +617,7 @@ public class MainActivity extends Activity implements IWordButtonClickListener{
 		// 减少金币
 		if (!handleCoins(-getDeleteWordCoins())) {
 			// 金币不够，显示提示对话框
+			showConfirmDialog(ID_DIALOG_LACK_COINS);
 			return;
 		}
 		
@@ -727,7 +734,8 @@ public class MainActivity extends Activity implements IWordButtonClickListener{
 			
 			@Override
 			public void onClick(View arg0) {
-				deleteOneWord();
+				//deleteOneWord();
+				showConfirmDialog(ID_DIALOG_DELETE_WORD);
 			}
 		});
 		
@@ -743,11 +751,64 @@ public class MainActivity extends Activity implements IWordButtonClickListener{
 			
 			@Override
 			public void onClick(View arg0) {
-				tipAnswer();
+				//tipAnswer();
+				showConfirmDialog(ID_DIALOG_TIP_ANSWER);
 			}
 		});
 	}
 	
+	//自定义AlertDialog事件响应
+	//删除错误答案
+	private IAlertDialogButtonListener mBtnOkDeleteWordListener =
+			new IAlertDialogButtonListener() {
+
+		@Override
+		public void onClick() {
+			// TODO Auto-generated method stub
+			deleteOneWord();
+		}
+	};
+	//答案提示
+	private IAlertDialogButtonListener mBtnOkTipAnswerListener = 
+			new IAlertDialogButtonListener() {
+
+		@Override
+		public void onClick() {
+			// TODO Auto-generated method stub
+			tipAnswer();
+		}
+	};
+	// 金币不足
+	private IAlertDialogButtonListener mBtnOkLackCoinsListener = 
+			new IAlertDialogButtonListener() {
+
+		@Override
+		public void onClick() {
+			// TODO Auto-generated method stub
+
+		}
+	};
+	
+	/**
+	 * 显示对话框
+	 * @param id
+	 */
+	private void showConfirmDialog(int id){
+		switch (id) {
+		case ID_DIALOG_DELETE_WORD:
+			Util.showDialog(MainActivity.this, "确认花掉" + getDeleteWordCoins() + "个金币去掉一个错误答案？", mBtnOkDeleteWordListener);
+			break;
+		case ID_DIALOG_TIP_ANSWER:
+			Util.showDialog(MainActivity.this, "确认花掉" + getTipCoins() + "个金币获得一个文字提示？", mBtnOkTipAnswerListener);
+			break;
+		case ID_DIALOG_LACK_COINS:
+			Util.showDialog(MainActivity.this, "金币不足！", mBtnOkLackCoinsListener);
+			break;
+
+		default:
+			break;
+		}
+	}
 	
 	
 	@Override
