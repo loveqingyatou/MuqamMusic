@@ -115,6 +115,11 @@ public class MainActivity extends Activity implements IWordButtonClickListener{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		
+		//读取数据
+		int[] datas = Util.loadData(this);
+		mCurrentStageIndex = datas[Const.INDEX_LOAD_DATA_STAGE];
+		mCurrentCoins = datas[Const.INDEX_LOAD_DATA_COINS];
+		
 		// 初始化控件
 		mBtnPlayStart = (ImageButton)findViewById(R.id.btn_play_start);
 		mBtnPlayStart.setOnClickListener(new View.OnClickListener() {
@@ -239,6 +244,8 @@ public class MainActivity extends Activity implements IWordButtonClickListener{
 	
 	@Override
     public void onPause() {
+		//保存游戏数据
+		Util.saveData(MainActivity.this, mCurrentStageIndex - 1, mCurrentCoins);
         mViewPan.clearAnimation();
         //暂停音乐
         MyPlayer.stopTheSong(MainActivity.this);
