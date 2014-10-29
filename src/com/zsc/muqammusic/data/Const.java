@@ -6,7 +6,7 @@ public class Const {
 	
 	public static final int INDEX_SONG_NAME = 1;
 	
-	public static final int TOTAL_COINS = 100;
+	public static final int TOTAL_COINS = 1000;
 	
 	public static final String SONG_INFO[][] = {
 		{"__00000.m4a", "Õ÷·þ"},
