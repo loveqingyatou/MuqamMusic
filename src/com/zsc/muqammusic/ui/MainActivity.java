@@ -14,6 +14,7 @@ import com.zsc.muqammusic.model.Song;
 import com.zsc.muqammusic.model.WordButton;
 import com.zsc.muqammusic.myui.MyGridView;
 import com.zsc.muqammusic.util.MyLog;
+import com.zsc.muqammusic.util.MyPlayer;
 import com.zsc.muqammusic.util.Util;
 
 import android.app.Activity;
@@ -215,6 +216,7 @@ public class MainActivity extends Activity implements IWordButtonClickListener{
 		
 		// 处理提示按键事件
 		handleTipAnswer();
+		
 	}
 
 	
@@ -228,6 +230,9 @@ public class MainActivity extends Activity implements IWordButtonClickListener{
 				// 开始拨杆进入动画
 				mViewPanBar.startAnimation(mBarInAnim);
 				mBtnPlayStart.setVisibility(View.INVISIBLE);
+				
+				//播放音乐
+				MyPlayer.playSong(MainActivity.this, mCurrentSong.getSongFileName());
 			}
 		}
 	}
@@ -235,6 +240,8 @@ public class MainActivity extends Activity implements IWordButtonClickListener{
 	@Override
     public void onPause() {
         mViewPan.clearAnimation();
+        //暂停音乐
+        MyPlayer.stopTheSong(MainActivity.this);
         super.onPause();
     }
 	
@@ -284,6 +291,9 @@ public class MainActivity extends Activity implements IWordButtonClickListener{
 		mAllWords = initAllWord();
 		// 更新数据- MyGridView
 		mMyGridView.updateData(mAllWords);
+		
+		//一开始播放音乐
+		handlePlayButton();
 	}
 	
 	/**
@@ -373,6 +383,12 @@ public class MainActivity extends Activity implements IWordButtonClickListener{
 		
 		//停止未完成的动画
 		mViewPan.clearAnimation();
+		
+		//停止正在播放的音乐
+		MyPlayer.stopTheSong(MainActivity.this);
+		
+		//播放音效
+		MyPlayer.playTone(MainActivity.this, MyPlayer.INDEX_STONE_COIN);
 		
 		//当前关的索引
 		mCurrentStagePassView = (TextView)findViewById(R.id.text_current_stage_pass);

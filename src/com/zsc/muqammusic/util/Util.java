@@ -47,7 +47,7 @@ public class Util {
 	 * @param message
 	 * @param listener
 	 */
-	public static void showDialog(Context context, String message, final IAlertDialogButtonListener listener){
+	public static void showDialog(final Context context, String message, final IAlertDialogButtonListener listener){
 		View dialogView = null;
 		//AlertDialog.Builder builder = new AlertDialog.Builder(context,R.style.Theme_Transparent);
 		AlertDialog.Builder builder = new AlertDialog.Builder(context);
@@ -70,7 +70,8 @@ public class Util {
 				if(listener != null){
 					listener.onClick();
 				}
-				
+				//播放音效
+				MyPlayer.playTone(context, MyPlayer.INDEX_STONE_ENTER);
 			}
 		});
 		btnCancelView.setOnClickListener(new OnClickListener() {
@@ -82,6 +83,8 @@ public class Util {
 				if(mAlertDialog != null){
 					mAlertDialog.cancel();
 				}
+				//播放音效
+				MyPlayer.playTone(context, MyPlayer.INDEX_STONE_CANCEL);
 			}
 		});
 		
