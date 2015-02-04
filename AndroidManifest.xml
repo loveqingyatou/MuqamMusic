@@ -7,6 +7,8 @@
     <uses-sdk
         android:minSdkVersion="8"
         android:targetSdkVersion="19" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <application
         android:allowBackup="true"
@@ -17,6 +19,17 @@
             android:name=".ui.MainActivity"
             android:screenOrientation="portrait"
             android:label="@string/app_name" >
+            
+        </activity>
+        <activity
+            android:name=".ui.AllPassView"
+            android:screenOrientation="portrait"
+            android:label="@string/app_name" >
+        </activity>
+        <activity
+            android:name=".ui.StartPageActivity"
+            android:screenOrientation="portrait"
+            android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -24,10 +37,44 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.AllPassView"
+            android:name=".ui.StartActivity"
             android:screenOrientation="portrait"
             android:label="@string/app_name" >
         </activity>
+        <activity
+            android:name=".ui.KnowMuqamActivity"
+            android:screenOrientation="portrait"
+            android:label="@string/app_name" >
+        </activity>
+        <activity
+            android:name=".ui.PlayActivity"
+            android:screenOrientation="portrait"
+            android:label="@string/app_name" >
+        </activity>
+        <activity
+            android:name=".ui.JieshaoActivity"
+            android:screenOrientation="portrait"
+            android:label="@string/app_name" >
+        </activity>
+        <activity
+            android:name=".ui.InstruGirdActivity"
+            android:screenOrientation="portrait"
+            android:label="@string/app_name" >
+        </activity>
+        <activity
+            android:name=".ui.InstruActivity"
+            android:screenOrientation="portrait"
+            android:label="@string/app_name" >
+        </activity>
+        
+        <service android:name=".service.MusicPlayerService">
+            <intent-filter>
+                <action android:name="com.zsc.muqammusic.service.MusicPlayerService" >
+                </action>
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>

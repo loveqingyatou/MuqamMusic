@@ -22,7 +22,7 @@
             android:id="@+id/txt_main_achievement"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="您已击败"  
+            android:text="您获胜"  
             android:textColor="@color/white"
             android:textSize="18sp"/>
     </LinearLayout>
@@ -81,7 +81,7 @@
         <ImageView 
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/game_coin_icon"/>
+            android:src="@drawable/game_coins_icon"/>
         
         <TextView
             android:layout_width="wrap_content"
@@ -110,5 +110,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="20dp"
+        android:visibility="invisible"
         android:background="@drawable/weixin_button_icon"/>
 </LinearLayout>

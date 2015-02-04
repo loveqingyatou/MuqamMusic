@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/index_background"
+    >
+
+	<ViewFlipper android:id="@+id/ViewFlipper1"
+		android:layout_width="match_parent" 
+		android:layout_height="match_parent"
+		android:background="@drawable/tv_bg2">
+	</ViewFlipper>
+	
+	<!-- Top bar -->
+    <include layout="@layout/top_bar_tx" />
+	
+	<RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal"
+        android:orientation="vertical" >
+        <ScrollView
+            android:id="@+id/ins_scroll"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_alignParentBottom="true"
+            android:background="@drawable/tv_bg2" >
+
+            <TextView
+                android:id="@+id/ins_des"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:text="@string/muqam_des"
+                android:textColor="#000000"
+                android:textSize="15sp" />
+       </ScrollView>   
+    </RelativeLayout>
+</FrameLayout>

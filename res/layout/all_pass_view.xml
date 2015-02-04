@@ -35,7 +35,7 @@
         <ImageView 
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/game_coin_icon"/>
+            android:background="@drawable/game_coins_icon"/>
     </LinearLayout>
     
     <LinearLayout
@@ -67,7 +67,7 @@
         <ImageView 
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/game_coin_icon"/>
+            android:background="@drawable/game_coins_icon"/>
     </LinearLayout>
     
     <FrameLayout 

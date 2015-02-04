@@ -15,6 +15,6 @@
 -->
 
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:state_pressed="true" android:drawable="@drawable/all_back_sel" />
-    <item android:drawable="@drawable/all_back" />
+    <item android:state_pressed="true" android:drawable="@drawable/all_back2_sel" />
+    <item android:drawable="@drawable/all_back2" />
 </selector>

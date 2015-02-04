@@ -8,7 +8,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_centerVertical="true"
+        android:layout_centerVertical="false"
+        android:layout_below="@+id/musicNumber"
+        android:layout_marginTop="75dp"
         android:orientation="vertical" >
 
         <FrameLayout
@@ -28,7 +30,7 @@
                 android:layout_gravity="bottom"
                 android:layout_marginBottom="8dp"
                 android:layout_marginLeft="8dp"
-                android:background="@drawable/game_coin_icon" />
+                android:background="@drawable/game_coins_icon" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -57,9 +59,9 @@
                 android:layout_width="15dp"
                 android:layout_height="15dp"
                 android:layout_gravity="bottom"
-                android:layout_marginBottom="8dp"
+                android:layout_marginBottom="9dp"
                 android:layout_marginLeft="8dp"
-                android:background="@drawable/game_coin_icon" />
+                android:background="@drawable/game_coins_icon" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -79,10 +81,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
+        android:layout_centerVertical="false"
+        android:layout_below="@+id/musicNumber"
+        android:layout_marginTop="30dp"
+        android:visibility="invisible"
         android:background="@drawable/share_button_icon" />
 
     <FrameLayout
+        android:id="@+id/musicNumber"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"

@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+    
+    <LinearLayout
+        android:id="@+id/rl_player_control_panel"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/ll_player_control"
+        android:orientation="vertical" >
+
+        <RelativeLayout
+            android:id="@+id/rl_player_progress"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:visibility="visible" >
+
+            <SeekBar
+                android:id="@+id/sb_player_progress"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10.0dip"
+                android:layout_marginRight="10.0dip"
+                android:clickable="true"
+                android:max="100"
+                android:maxHeight="2.0dip"
+                android:minHeight="2.0dip"
+                android:paddingLeft="6.0dip"
+                android:paddingRight="6.0dip"
+                android:progressDrawable="@drawable/player_seekbar_progress_style"
+                android:thumb="@drawable/bg_thumb_seekbar_progress"
+                android:thumbOffset="10.0dip" />
+
+            <TextView
+                android:id="@+id/tv_player_played_time"
+                android:layout_width="40.0dip"
+                android:layout_height="18.0dip"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@id/sb_player_progress"
+                android:layout_marginLeft="10.0dip"
+                android:clickable="true"
+                android:text="00:00"
+                android:textColor="#ffffffff"
+                android:textSize="12dp" />
+
+            <TextView
+                android:id="@+id/tv_player_total_time"
+                android:layout_width="40.0dip"
+                android:layout_height="18.0dip"
+                android:layout_alignParentRight="true"
+                android:layout_below="@id/sb_player_progress"
+                android:layout_marginRight="10.0dip"
+                android:clickable="true"
+                android:text="00:00"
+                android:textColor="#ffffffff"
+                android:textSize="12dp" />
+        </RelativeLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_player_control"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="5.0dip"
+        android:gravity="center"
+        android:orientation="horizontal" >
+
+        <ImageView
+            android:id="@+id/btn_player_mode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.0"
+            android:src="@drawable/bg_button_player_mode_random"
+            android:visibility="invisible" />
+
+        <ImageView
+            android:id="@+id/iv_player_prev"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.0"
+            android:src="@drawable/bg_button_player_prev" />
+
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.0" >
+
+            <ImageView
+                android:id="@+id/iv_player_play_pause"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:padding="5.0dip"
+                android:src="@drawable/bg_button_player_play" />
+
+            <ProgressBar
+                android:id="@+id/player_main_load_progressbar"
+                android:layout_width="60.0dip"
+                android:layout_height="60.0dip"
+                android:layout_gravity="center"
+                android:indeterminateDrawable="@drawable/bg_player_buffer"
+                android:visibility="gone" />
+        </FrameLayout>
+
+        <ImageView
+            android:id="@+id/iv_player_next"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.0"
+            android:src="@drawable/bg_button_player_next" />
+
+        <ImageView
+            android:id="@+id/btn_player_download"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.0"
+            android:src="@drawable/bg_button_player_download" 
+            android:visibility="invisible"/>
+    </LinearLayout>
+
+</RelativeLayout>

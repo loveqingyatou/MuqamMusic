@@ -82,6 +82,9 @@ public class MainActivity extends Activity implements IWordButtonClickListener{
 	// Play 按键事件
 	private ImageButton mBtnPlayStart;
 	
+	// 返回 按键事件
+	private ImageButton mBtnBack;
+	
 	// 过关界面
 	private View mPassView;
 	
@@ -119,6 +122,8 @@ public class MainActivity extends Activity implements IWordButtonClickListener{
 		int[] datas = Util.loadData(this);
 		mCurrentStageIndex = datas[Const.INDEX_LOAD_DATA_STAGE];
 		mCurrentCoins = datas[Const.INDEX_LOAD_DATA_COINS];
+		// 过关界面
+		mPassView = (LinearLayout)this.findViewById(R.id.pass_view);
 		
 		// 初始化控件
 		mBtnPlayStart = (ImageButton)findViewById(R.id.btn_play_start);
@@ -127,7 +132,21 @@ public class MainActivity extends Activity implements IWordButtonClickListener{
 			@Override
 			public void onClick(View arg0) {
 				// TODO Auto-generated method stub
-				handlePlayButton();
+				if(mPassView.getVisibility() != View.VISIBLE){
+					handlePlayButton();
+				}			
+			}
+		});
+		
+		mBtnBack = (ImageButton)findViewById(R.id.btn_bar_back);
+		mBtnBack.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View arg0) {
+				// TODO Auto-generated method stub
+				if(mPassView.getVisibility() != View.VISIBLE){
+					MainActivity.this.finish();
+				}			
 			}
 		});
 		
@@ -346,7 +365,9 @@ public class MainActivity extends Activity implements IWordButtonClickListener{
 				
 				@Override
 				public void onClick(View arg0) {
-					clearTheAnswer(holder);
+					if(mPassView.getVisibility() != View.VISIBLE){
+						clearTheAnswer(holder);
+					}					
 				}
 			});
 			
@@ -384,49 +405,56 @@ public class MainActivity extends Activity implements IWordButtonClickListener{
 	 * 处理过关界面及事件
 	 */
 	private void handlePassEvent() {
+		
 		//显示过关界面
-		mPassView = (LinearLayout)this.findViewById(R.id.pass_view);
-		mPassView.setVisibility(View.VISIBLE);
-		
-		//停止未完成的动画
-		mViewPan.clearAnimation();
-		
-		//停止正在播放的音乐
-		MyPlayer.stopTheSong(MainActivity.this);
-		
-		//播放音效
-		MyPlayer.playTone(MainActivity.this, MyPlayer.INDEX_STONE_COIN);
-		
-		//当前关的索引
-		mCurrentStagePassView = (TextView)findViewById(R.id.text_current_stage_pass);
-		if(mCurrentStagePassView != null){
-			mCurrentStagePassView.setText((mCurrentStageIndex + 1) + "");
-		}
-		
-		//显示歌曲名称
-		mCurrentSongNamePassView = (TextView)findViewById(R.id.text_current_song_name_pass);
-		if(mCurrentSongNamePassView != null){
-			mCurrentSongNamePassView.setText(mCurrentSong.getSongName());
-		}
-		
-		//下一关按键处理
-		ImageButton btnPass = (ImageButton)findViewById(R.id.btn_next);
-		btnPass.setOnClickListener(new OnClickListener() {
+		//mPassView = (LinearLayout)this.findViewById(R.id.pass_view);
+		if(mPassView.getVisibility() != View.VISIBLE){
+			mPassView.setVisibility(View.VISIBLE);
 			
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				if(judegAppPassed()){
-					//进入到通关界面
-					Util.startActivity(MainActivity.this, AllPassView.class);
-				}else{
-					//开始下一关
-					mPassView.setVisibility(View.GONE);
-					//加载关卡数据
-					initCurrentStageData();
-				}
+			//金币数量+3
+			mCurrentCoins += 3;
+			mViewCurrentCoins.setText(mCurrentCoins + "");
+			
+			//停止未完成的动画
+			mViewPan.clearAnimation();
+			
+			//停止正在播放的音乐
+			MyPlayer.stopTheSong(MainActivity.this);
+			
+			//播放音效
+			MyPlayer.playTone(MainActivity.this, MyPlayer.INDEX_STONE_COIN);
+			
+			//当前关的索引
+			mCurrentStagePassView = (TextView)findViewById(R.id.text_current_stage_pass);
+			if(mCurrentStagePassView != null){
+				mCurrentStagePassView.setText((mCurrentStageIndex + 1) + "");
 			}
-		});
+			
+			//显示歌曲名称
+			mCurrentSongNamePassView = (TextView)findViewById(R.id.text_current_song_name_pass);
+			if(mCurrentSongNamePassView != null){
+				mCurrentSongNamePassView.setText(mCurrentSong.getSongName());
+			}
+			
+			//下一关按键处理
+			ImageButton btnPass = (ImageButton)findViewById(R.id.btn_next);
+			btnPass.setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					// TODO Auto-generated method stub
+					if(judegAppPassed()){
+						//进入到通关界面
+						Util.startActivity(MainActivity.this, AllPassView.class);
+					}else{
+						//开始下一关
+						mPassView.setVisibility(View.GONE);
+						//加载关卡数据
+						initCurrentStageData();
+					}
+				}
+			});
+		}
 	}
 	
 	/**
@@ -758,7 +786,9 @@ public class MainActivity extends Activity implements IWordButtonClickListener{
 			@Override
 			public void onClick(View arg0) {
 				//deleteOneWord();
-				showConfirmDialog(ID_DIALOG_DELETE_WORD);
+				if(mPassView.getVisibility() != View.VISIBLE){
+					showConfirmDialog(ID_DIALOG_DELETE_WORD);
+				}				
 			}
 		});
 		
@@ -775,7 +805,9 @@ public class MainActivity extends Activity implements IWordButtonClickListener{
 			@Override
 			public void onClick(View arg0) {
 				//tipAnswer();
-				showConfirmDialog(ID_DIALOG_TIP_ANSWER);
+				if(mPassView.getVisibility() != View.VISIBLE){
+					showConfirmDialog(ID_DIALOG_TIP_ANSWER);
+				}		
 			}
 		});
 	}
